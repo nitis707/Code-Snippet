@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
-const CreateComment = ({ snippetId }) => {
+const CreateComment = ({ snippet }) => {
   const [text, setText] = useState("");
   const [comments, setComments] = useState([]);
 
@@ -9,7 +9,7 @@ const CreateComment = ({ snippetId }) => {
     e.preventDefault();
     try {
       const res = await axios.post(
-        `http://localhost:8001/api/v1/snippet/${snippetId}/comment`,
+        `http://localhost:8001/api/v1/snippet/${snippet.id}/comment`,
         { text }
       );
 
@@ -20,27 +20,11 @@ const CreateComment = ({ snippetId }) => {
     }
   };
 
-  useEffect(() => {
-    const fetchComments = async () => {
-      try {
-        const res = await axios.get(
-          `http://localhost:8001/api/v1/snippet/${snippetId}/comment`
-        );
-
-        setComments(res.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    fetchComments();
-  }, []);
-
   return (
     <div className="mt-5">
-      {comments.map((comment, index) => (
+      {snippet.comments.map((comment, index) => (
         <li className="text-sm" key={index}>
-          {comment.text}
+          {comment.content}
         </li>
       ))}
 

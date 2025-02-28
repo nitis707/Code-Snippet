@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import commentRouter from "./routes/comment.js"
+import axios from "axios";
 
 const app = express();
 app.use(express.json());
@@ -13,14 +13,15 @@ app.use(cors({
 
 
 app.post("/events", (req, res) => {
-    console.log("Received event", req.body.type);
+    const events = req.body;
+    axios.post(`http://localhost:8000/events`, events); // snippet service
+    axios.post(`http://localhost:8001/events`, events); // comment service
+    axios.post(`http://localhost:8002/events`, events); // query service
+
     return res.status(200).json({});
 })
 
-app.use("/api/v1/snippet", commentRouter);
-
-
-const PORT = 8001;
+const PORT = 8005;
 app.listen(PORT, () => {
     console.log(`Server listen at port ${PORT}`);
 });
